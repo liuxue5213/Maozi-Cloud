@@ -15,7 +15,7 @@ export default function Dashboard() {
   const [apps, setApps] = useState<AppItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [editingApp, setEditingApp] = useState<AppItem | null>(null);
+  const [editingApp, setEditingApp] = useState<AppItem | undefined>(undefined);
   const navigate = useNavigate();
   const username = localStorage.getItem('username') || 'admin';
   const { token: { colorBgContainer, borderRadiusLG } } = theme.useToken();

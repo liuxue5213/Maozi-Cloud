@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Modal, Table, Button, Upload, Input, InputNumber, App as AntdApp, Tag, Space, Popconfirm, Tooltip } from 'antd';
-import { InboxOutlined, UploadOutlined, DownloadOutlined, StarOutlined } from '@ant-design/icons';
+import { InboxOutlined, UploadOutlined, StarOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import { ApkVersion, appApi, fileApi } from '../api/services';
 
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function VersionManager({ open, appId, appName, onClose, onRefresh }: Props) {
-  const { message: msg } = AntdApp.useApp();
+  const { message } = AntdApp.useApp();
   const [versions, setVersions] = useState<ApkVersion[]>([]);
   const [loading, setLoading] = useState(false);
   const [uploadModal, setUploadModal] = useState(false);
@@ -61,7 +61,7 @@ export default function VersionManager({ open, appId, appName, onClose, onRefres
       if (codeMatch) {
         setFormData(prev => ({ ...prev, version_code: parseInt(codeMatch[1]) }));
       }
-      msg.success('APK 上传成功');
+      message.success('APK 上传成功');
     } catch {
       // 错误已在拦截器处理
     } finally {
@@ -72,11 +72,11 @@ export default function VersionManager({ open, appId, appName, onClose, onRefres
 
   const handleAddVersion = async () => {
     if (!apkUrl) {
-      msg.error('请先上传 APK 文件');
+      message.error('请先上传 APK 文件');
       return;
     }
     if (!formData.version_name) {
-      msg.error('请输入版本名称');
+      message.error('请输入版本名称');
       return;
     }
 
@@ -90,7 +90,7 @@ export default function VersionManager({ open, appId, appName, onClose, onRefres
         min_sdk: formData.min_sdk,
         changelog: formData.changelog,
       });
-      msg.success('版本添加成功');
+      message.success('版本添加成功');
       setUploadModal(false);
       setApkUrl('');
       setUploadProgress(0);
@@ -104,7 +104,7 @@ export default function VersionManager({ open, appId, appName, onClose, onRefres
   const handleDeleteVersion = async (versionId: string) => {
     try {
       await appApi.deleteVersion(appId, versionId);
-      msg.success('删除成功');
+      message.success('删除成功');
       fetchVersions();
       onRefresh();
     } catch {
@@ -115,7 +115,7 @@ export default function VersionManager({ open, appId, appName, onClose, onRefres
   const handleSetLatest = async (versionId: string) => {
     try {
       await appApi.setLatestVersion(appId, versionId);
-      msg.success('已设为最新版本');
+      message.success('已设为最新版本');
       fetchVersions();
       onRefresh();
     } catch {
