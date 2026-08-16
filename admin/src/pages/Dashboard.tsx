@@ -2,12 +2,12 @@ import { useState, useEffect } from 'react';
 import { Layout, Menu, Button, Dropdown, Avatar, theme } from 'antd';
 import {
   AppstoreOutlined, PlusOutlined, LogoutOutlined, UserOutlined,
-  GlobalOutlined, AndroidOutlined,
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import AppList from '../components/AppList';
 import AppForm from '../components/AppForm';
-import { AppItem } from '../api/services';
+import { AppItem, appApi } from '../api/services';
+import type { MenuProps } from 'antd';
 
 const { Header, Sider, Content } = Layout;
 
@@ -23,7 +23,7 @@ export default function Dashboard() {
   const fetchApps = async () => {
     setLoading(true);
     try {
-      const res: any = await (await import('../api/services')).appApi.getList();
+      const res = await appApi.getList();
       setApps(res.data);
     } finally {
       setLoading(false);
@@ -47,7 +47,7 @@ export default function Dashboard() {
 
   const handleModalClose = () => {
     setModalOpen(false);
-    setEditingApp(null);
+    setEditingApp(undefined);
   };
 
   const handleSuccess = () => {
@@ -55,11 +55,9 @@ export default function Dashboard() {
     fetchApps();
   };
 
-  const userMenu = {
-    items: [
-      { key: 'logout', icon: <LogoutOutlined />, label: '退出登录', onClick: handleLogout },
-    ],
-  };
+  const userMenu: MenuProps['items'] = [
+    { key: 'logout', icon: <LogoutOutlined />, label: '退出登录', onClick: handleLogout },
+  ];
 
   return (
     <Layout style={{ minHeight: '100vh' }}>

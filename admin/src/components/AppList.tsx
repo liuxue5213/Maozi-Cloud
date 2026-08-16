@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Table, Tag, Button, Space, Popconfirm, Image, Tooltip, Badge, App as AntdApp } from 'antd';
+import { Table, Tag, Button, Space, Popconfirm, Image, Tooltip, Badge, Modal, message } from 'antd';
 import { EditOutlined, DeleteOutlined, AndroidOutlined, GlobalOutlined, HistoryOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
-import { AppItem } from '../api/services';
+import { AppItem, appApi } from '../api/services';
 import VersionManager from './VersionManager';
 
 interface Props {
@@ -13,14 +13,21 @@ interface Props {
 }
 
 export default function AppList({ apps, loading, onEdit, onRefresh }: Props) {
-  const { modal } = AntdApp.useApp();
   const [versionModal, setVersionModal] = useState<{ open: boolean; appId?: string; appName?: string }>({ open: false });
 
   const handleDelete = async (id: string) => {
-    const { appApi } = await import('../api/services');
-    await appApi.delete(id);
-    modal.success({ content: '删除成功' });
-    onRefresh();
+    Modal.confirm({
+      title: '确认删除',
+      content: '删除后不可恢复，确定要删除该应用吗？',
+      okText: '确认删除',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk: async () => {
+        await appApi.delete(id);
+        message.success('删除成功');
+        onRefresh();
+      },
+    });
   };
 
   const showVersions = (app: AppItem) => {

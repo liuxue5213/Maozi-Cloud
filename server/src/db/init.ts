@@ -1,6 +1,5 @@
 import { db } from '../config/database';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 
 export function initDatabase() {
   // 应用表
