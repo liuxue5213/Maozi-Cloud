@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+*/node_modules/
+*/package-lock.json
+
+# Build outputs
+server/dist/
+admin/dist/
+admin/build/
+*.apk
+*.aab
+
+# Uploads (keep directory but ignore contents)
+server/uploads/*
+!server/uploads/.gitkeep
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Environment
+.env
+.env.local
+.env.*.local
+*/.env
+
+# Logs
+*.log
+npm-debug.log*
+
+# Android
+android/.gradle/
+android/build/
+android/app/build/
+# android/local.properties (用户SDK路径，不应提交，已在单独 .gitignore 中)
+*.keystore
+*.jks
